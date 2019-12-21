@@ -16,14 +16,14 @@
 </script>
 
 
-<style lang="scss" scoped>
+<style lang="scss">
   body,html,.index{
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
-    font-size: 0.16rem;
-    line-height: 0.2rem;
+    // font-size: 0.16rem;
+    // line-height: 0.2rem;
     .content{
       width: 100%;
       flex: 1;

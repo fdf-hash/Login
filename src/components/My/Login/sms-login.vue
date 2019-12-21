@@ -11,8 +11,8 @@
                     <input type="text" maxlength="11" placeholder="请输入手机号" v-model='fy_zc_sjh'>
                 </div>
                 <div class="fy_num">
-                    <input type="password" placeholder="请输入短信验证码">
-                    <span class="fy_sms">获取验证码</span>
+                    <input type="text" placeholder="请输入短信验证码" v-model="fy_zc_dx">
+                    <span class="fy_sms" @click="fy_huo">获取验证码</span>
                 </div>
                 <div class="fy_others">
                     <span>*未注册的手机号将自动注册</span>
@@ -34,7 +34,10 @@
         name: "sms-login",
         data(){
             return{
-                fy_zc_sjh:""
+                fy_zc_sjh:"",
+                fy_zc_dx:"",
+                // token码设置
+                fy_to_ken:""
             }
         },
         methods:{
@@ -44,13 +47,62 @@
             },
             // 跳转到设置密码页面
             fy_toSetpass(){
-                var arr = JSON.parse(localStorage.getItem('dl'))||[];
-                if(this.fy_zc_sjh==''){
-                    alert("手机号不能为空")
-                    return false
-                }
+                // var arr = JSON.parse(localStorage.getItem('dl'))||[];
+                // if(this.fy_zc_sjh==''){
+                //     alert("手机号不能为空")
+                //     return false
+                // }
               
-                this.$router.push({path:'/set-pass',query:{zc_sjh:this.fy_zc_sjh}})
+                // this.$router.push({path:'/set-pass',query:{zc_sjh:this.fy_zc_sjh}})
+                var mage = /^[0-9]{6}$/
+                var boler = mage.test(this.fy_zc_dx);
+                 if(this.fy_zc_sjh==''){
+                     this.$toast("手机号不能为空")
+                     return false
+                 }else if(boler){
+                   this.axios.post("https://test.365msmk.com/api/app/login",{
+                       mobile:this.fy_zc_sjh,      //输入的手机号
+                       sms_code:this.fy_zc_dx,     //收到的验证码
+                       code:this.fy_to_ken,        //收到的remember_token值
+                       type:2                      //固定值2代表注册
+                   }).then((res)=>{
+                       console.log(res.data.code)
+                       this.fy_to_ken = res.data.data.remember_token
+                       sessionStorage.setItem("code",this.fy_zc_dx,);
+                       if(res.data.code==200){
+                           this.$router.push({name:'set-pass',params:{
+                               sjh:this.fy_zc_sjh,    //路由传值发送给初始化密码的手机号
+                               dx:this.fy_zc_dx,      //路由传值发送给初始化密码的验证码
+                               code:this. fy_to_ken,  //路由传值发送给初始化密码的remember_token值
+                           }});
+                           return false;
+                       }else{
+                           this.$toast("验证码错误")
+                           return false;
+                       }
+                   })
+                   return false;
+                }else{
+                   this.$toast("请输入六位验证码")
+                    return false;
+                }
+            },
+            // 获取短信验证码
+            fy_huo(){
+                var msage = /^[1][3,4,5,6,7,8][0-9]{9}$/;
+                var bool = msage.test(this.fy_zc_sjh)
+                console.log(bool)
+                if(!bool){
+                    alert("请输入正确的手机号");
+                    return false;
+                }else{
+                   this.axios.post("https://test.365msmk.com/api/app/smsCode",{
+                       mobile: this.fy_zc_sjh,   //（手机号）
+                       sms_type: "login"	  //（固定值login）
+                   }).then((res)=>{
+                       console.log(res)
+                   })
+                }
             }
         }
     }

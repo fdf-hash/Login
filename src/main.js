@@ -2,14 +2,14 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import Rem from "../static/js/rem"
+import axios from "axios";
+Vue.prototype.axios = axios;
 import 'element-ui/lib/theme-chalk/index.css';
 import { Checkbox, CheckboxGroup } from 'vant';
-
 import { ActionSheet } from 'vant';
 import {Calendar} from 'element-ui';
 Vue.use(Calendar)
 Vue.use(ActionSheet);
-
 Vue.use(Checkbox).use(CheckboxGroup)
 //--->引入store仓库
 import store from './store';
@@ -20,13 +20,9 @@ Vue.use(DropdownItem);
 //vant外部样式
 import 'vant/lib/index.css';
 import Vant from 'vant';
-
 import 'vant/lib/index.css';
-
 import { Popup } from 'vant';
 import { Picker } from 'vant';
-//按钮
-
 //时间
 import { DatetimePicker } from 'vant';
 Vue.use(DatetimePicker);
@@ -35,7 +31,6 @@ import { Area } from 'vant';
 Vue.use(Area);
 Vue.use(Picker);
 Vue.use(Popup);
-
 Vue.use(Vant);
 //vant网络样式
 import "../src/assets/resetui.css"
@@ -65,8 +60,8 @@ Vue.use(NumberKeyboard)
 router.beforeEach((to, from, next) =>{
   const type = to.meta.type
   // 判断该路由是否需要登录权限
-  if (type === 'login') {
-    if (window.localStorage.getItem('login')) {
+  if (type === 'token') {
+    if (window.localStorage.getItem('token')) {
       next()
     } else {
       next('/login')

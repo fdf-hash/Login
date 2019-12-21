@@ -242,10 +242,10 @@
                     }
                 }
                 div:nth-of-type(4){
-                    width: 100%;
+                    width: 6.14rem;
                     margin-top: 0.30rem;
                     background: #ffffff;
-                    padding: 0.26rem;
+                    padding: 0.26rem 0 0.26rem 0.26rem;
                     h2{
                         width: 5.80rem;
                         

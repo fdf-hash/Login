@@ -10,10 +10,10 @@
             <!-- 设置密码主体 -->
             <div class="fy_box">
                 <div class="fy_num">
-                    <input type="text" maxlength="11" placeholder="请输入登录密码" v-model='fy_zc_pass'>
+                    <input type="text" maxlength="11" placeholder="请设置9位登录密码" v-model='fy_zc_pass'>
                 </div>
                 <div class="fy_num">
-                    <input type="text" maxlength="11" placeholder="请再次输入密码">
+                    <input type="text" maxlength="11" placeholder="请再次设置9密码" v-model='fy_zc_2pass'>
                 </div>
                 <!-- 确定按钮 -->
                 <div class="fy_login">
@@ -31,24 +31,67 @@
         data(){
             return{
                 fy_zc_pass:"",
-                id:0
-              
+                fy_zc_2pass:"",
+                fy_ac_shou:"",
+                fy_ac_dx:"",
+                fy_code:"",
+                id:0 
             }
         },
         mounted(){
-            console.log(this.$route.query.zc_sjh)
+            // console.log(this.$route.query.zc_sjh)
+            this.fy_ac_shou = this.$route.params.sjh
+            this.fy_ac_dx=this.$route.params.dx
+            this.fy_code=this.$route.params.code
+            console.log(this.fy_ac_shou)
+            console.log(this.fy_ac_dx)
+             console.log(this.fy_code)
         },
         methods:{
             // 跳转到信息填写路由
             fy_toSetmessage(){
-                console.log(this.$route.query.zc_sjh)
-                var arr = JSON.parse(localStorage.getItem('dl'))||[];
-                this.id+=1;
-                var obj = {'id':this.id,'zc_sjh':this.$route.query.zc_sjh,'zc_pass':this.fy_zc_pass}
-                console.log(obj)
-                arr.unshift(obj)
-                localStorage.setItem('dl',JSON.stringify(arr))
-                this.$router.push('/set-message')
+                var mag = /^[0-9]{9}$/
+                var pass1 = mag.test(this.fy_zc_pass)
+                if(this.fy_zc_pass == this.fy_zc_2pass){
+                     if(pass1){
+                        this.axios.post("https://test.365msmk.com/api/app/password",{
+                            mobile: this.fy_ac_shou,    //手机号 
+                            password:this.fy_zc_2pass,	    //输入的密码
+                            sms_code: this.fy_ac_dx,        //收到的验证码
+                        },{
+                             headers: { Authorization: "Bearer " + this.fy_code }
+                        }).then((res)=>{
+                            console.log(res.data)
+                            if(res.data.code == 200){
+                                this.$router.push({name:"Login",params:{
+                                     sjh:this.fy_zc_sjh,    //路由传值发送给初始化密码的手机号
+                                     dx:this.fy_zc_dx,      //路由传值发送给初始化密码的验证码
+                                     code:this.fy_code,  //路由传值发送给初始化密码的remember_token值
+                                }})
+                                return false
+                            }else{
+                                alert(res.data.msg)
+                            }
+                        })
+                        return false
+                    }else{
+                        alert(222)
+                        return false
+                    }
+                    return false
+                }else{
+                    alert("两次输入密码不一致");
+                    return false
+                }
+               
+                // console.log(this.$route.query.zc_sjh)
+                // var arr = JSON.parse(localStorage.getItem('dl'))||[];
+                // this.id+=1;
+                // var obj = {'id':this.id,'zc_sjh':this.$route.query.zc_sjh,'zc_pass':this.fy_zc_pass}
+                // console.log(obj)
+                // arr.unshift(obj)
+                // localStorage.setItem('dl',JSON.stringify(arr))
+                // this.$router.push('/set-message')
             }
         }
     }

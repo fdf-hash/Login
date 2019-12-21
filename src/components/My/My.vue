@@ -9,7 +9,7 @@
       				<img src="https://wap.365msmk.com/img/皇冠-2 拷贝@2x.ca9087bc.png" alt="" class="hg"/>
       			</div>
       			<div class="xm">
-      				<span class="mz">123456789</span>
+      				<span class="mz">{{code}}</span>
       				<span class="bj"></span>
       			</div>
       		</div>
@@ -125,7 +125,10 @@
 
 <script>
  export default {
-        name: "My",
+		name: "My",
+		mounted(){
+            this.code = this.$route.params.mobile
+		},
         methods:{
         	shezhi(){
         		this.$router.push('/setup')
@@ -136,7 +139,8 @@
         },
 		data(){
 			return{
-				list:JSON.parse(localStorage.getItem('dl'))||[]
+				list:JSON.parse(localStorage.getItem('dl'))||[],
+				code:''
 			}
 		}
 

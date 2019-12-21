@@ -36,36 +36,63 @@
             return{
                 fy_dl_sjh:"",
                 fy_dl_pass:"",
-                list:JSON.parse(localStorage.getItem('dl'))||[]
+                list:JSON.parse(localStorage.getItem('dl'))||[],
+                code:''
             }
+        },
+        mounted(){
+            this.code = this.$route.params.code
         },
         methods:{
             // 跳转到找回密码路由
             fy_toForget(){
-                this.$router.push("/forget")
+                this.$router.push({name:"forget",params:{
+                      mobile:this.fy_dl_sjh
+                }})
             },
             // 跳转到注册/验证码登录路由
             fy_toSms(){
                 this.$router.push("/sms-login")
             },
             fy_dl(){
-                if( this.fy_dl_sjh==''|| this.fy_dl_pass==''){
-                    alert('用户名或密码不能为空')
-                }else{
-                    for(let i=0;i<this.list.length;i++){
-                        if(this.fy_dl_sjh===this.list[i].zc_sjh && this.fy_dl_pass===this.list[i].zc_pass){
-                            var dl = true
+                // if( this.fy_dl_sjh==''|| this.fy_dl_pass==''){
+                //     alert('用户名或密码不能为空')
+                // }else{
+                //     for(let i=0;i<this.list.length;i++){
+                //         if(this.fy_dl_sjh===this.list[i].zc_sjh && this.fy_dl_pass===this.list[i].zc_pass){
+                //             var dl = true
 
-                            localStorage.setItem('login',JSON.stringify(dl))
-                            this.$router.push('/my')
-                            return false
-                        }
-                    }
-                    alert('用户名或密码不正确')
-                    this.fy_dl_sjh=this.fy_dl_pass='';
-                    return false
-                }
-                
+                //             localStorage.setItem('login',JSON.stringify(dl))
+                //             this.$router.push('/my')
+                //             return false
+                //         }
+                //     }
+                //     alert('用户名或密码不正确')
+                //     this.fy_dl_sjh=this.fy_dl_pass='';
+                //     return false
+                // }
+                if( this.fy_dl_sjh==''|| this.fy_dl_pass==''){
+                     alert('用户名或密码不能为空');
+                     return false
+                 }else{
+                     this.axios.post("https://test.365msmk.com/api/app/login",{
+                         mobile:  this.fy_dl_sjh,      //用户输入的手机号
+                         password:this.fy_dl_pass,     //用户输入的密码
+                         type: 1,			     //固定值1
+                     },{
+                         headers: { Authorization:"Bearer " + this.code}
+                     }).then((res)=>{
+                           console.log(res.data)
+                           if(res.data.code==200){
+                              localStorage.setItem("token", res.data.data.password);
+                               this.$router.push({name:"My",params:{
+                                   mobile:res.data.data.mobile
+                               }});
+                               return false
+                           }
+                     });
+                     return false;
+                 }
                 
                
               

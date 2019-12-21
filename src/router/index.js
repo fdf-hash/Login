@@ -148,7 +148,7 @@ export default new Router({
           name: "My",
           component: My,
           meta: {
-            type: 'login' //是否需要判断登录
+            type: 'token' //是否需要判断登录
           }
         },
         {
