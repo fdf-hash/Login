@@ -70,11 +70,19 @@
                        this.fy_to_ken = res.data.data.remember_token
                        sessionStorage.setItem("code",this.fy_zc_dx,);
                        if(res.data.code==200){
-                           this.$router.push({name:'set-pass',params:{
-                               sjh:this.fy_zc_sjh,    //路由传值发送给初始化密码的手机号
-                               dx:this.fy_zc_dx,      //路由传值发送给初始化密码的验证码
-                               code:this. fy_to_ken,  //路由传值发送给初始化密码的remember_token值
-                           }});
+                        //    如果注册过，那么直接跳转到首页home
+                           if(res.data.data.is_new==2){
+                                this.$router.push("/home")
+                                return false;
+                                // 如果没有注册过，那么跳转到设置密码页
+                            }else if(res.data.data.is_new==1){
+                               this.$router.push({name:'set-pass',params:{
+                                    sjh:this.fy_zc_sjh,    //路由传值发送给初始化密码的手机号
+                                    dx:this.fy_zc_dx,      //路由传值发送给初始化密码的验证码
+                                    code:this. fy_to_ken,  //路由传值发送给初始化密码的remember_token值
+                                }});
+                            return false;
+                            }
                            return false;
                        }else{
                            this.$toast("验证码错误")

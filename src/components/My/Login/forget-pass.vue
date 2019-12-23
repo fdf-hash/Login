@@ -62,7 +62,7 @@ export default {
     },
   methods: {
 
-    // 点击返回到登录路由
+    // 点击登录路由
     fy_button() {
       if (this.sun_shouji == "") {
         alert("手机号不能为空");
@@ -82,6 +82,7 @@ export default {
                console.log(res.data)
                if(res.data.code == 200){
                     this.$router.push("/login")
+                    return false;
                }
           })
       }

@@ -85,6 +85,7 @@
                            console.log(res.data)
                            if(res.data.code==200){
                               localStorage.setItem("token", res.data.data.password);
+                               localStorage.setItem("remembertoken", res.data.data.remember_token);
                                this.$router.push({name:"My",params:{
                                    mobile:res.data.data.mobile
                                }});

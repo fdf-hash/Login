@@ -9,7 +9,7 @@
       				<img src="https://wap.365msmk.com/img/皇冠-2 拷贝@2x.ca9087bc.png" alt="" class="hg"/>
       			</div>
       			<div class="xm">
-      				<span class="mz">{{code}}</span>
+      				<span class="mz">{{data.data.nickname}}</span>
       				<span class="bj"></span>
       			</div>
       		</div>
@@ -126,8 +126,18 @@
 <script>
  export default {
 		name: "My",
+		created(){
+			this.axios.get("https://test.365msmk.com/api/app/userInfo?",{
+               headers:{Authorization: "Bearer "+localStorage.getItem("remembertoken")}
+			}).then((res)=>{
+			   console.log(res)
+			   this.data = res.data
+			})
+		},
 		mounted(){
-            this.code = this.$route.params.mobile
+			// this.code = localStorage.getItem('token')
+			// 登录时跳转到我的详情页电话
+			this.code = this.$route.params.mobile
 		},
         methods:{
         	shezhi(){
@@ -140,7 +150,8 @@
 		data(){
 			return{
 				list:JSON.parse(localStorage.getItem('dl'))||[],
-				code:''
+				code:'',
+				data:''
 			}
 		}
 

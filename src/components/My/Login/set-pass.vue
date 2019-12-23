@@ -63,7 +63,7 @@
                         }).then((res)=>{
                             console.log(res.data)
                             if(res.data.code == 200){
-                                this.$router.push({name:"Login",params:{
+                                this.$router.push({name:"Information",params:{
                                      sjh:this.fy_zc_sjh,    //路由传值发送给初始化密码的手机号
                                      dx:this.fy_zc_dx,      //路由传值发送给初始化密码的验证码
                                      code:this.fy_code,  //路由传值发送给初始化密码的remember_token值

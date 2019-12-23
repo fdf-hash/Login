@@ -56,6 +56,7 @@ import Setpass from "../components/My/Login/set-pass";
 import Setmessage from "../components/My/Login/set-message";
 
 // 登录详情页
+// 提交信息
 import Information from "../components/My/Information";
 import Attention from "../components/My/Attention";
 import Collection from "../components/My/Collection";
@@ -65,6 +66,9 @@ import Setup from "../components/My/Setup";
 // 我是课程组件的详情页
 import Details from "../components/Course/Details"
 
+//===================================================================================================
+//选择学科路由
+import Attr from "../components/My/Attr";
 
 Vue.use(Router);
 export default new Router({
@@ -151,6 +155,7 @@ export default new Router({
             type: 'token' //是否需要判断登录
           }
         },
+        //==================================================================
         {
           path: "/xtsc",
           name: "Editxtsc",
@@ -175,12 +180,6 @@ export default new Router({
           path: "/fzmk",
           name: "Editfzmk",
           component: Editfzmk,
-        },
-
-        {
-          path: "/my",
-          name: "My",
-          component: My
         },
         {
           path: "/tearch",
@@ -212,7 +211,7 @@ export default new Router({
         },
         {
             path: "/",
-          redirect: "/home"
+            redirect: "/home"
         }
       ]
     },
@@ -226,9 +225,19 @@ export default new Router({
       name: "serch",
       component: Serch
     },
+    // 提交信息
     {
       path: "/information",
-      component: Information
+      name:"Information",
+      component: Information,
+      meta: {
+        type: 'token' //是否需要判断登录
+      }
+    },
+    {
+      path:"/attr",
+      name:"Attr",
+      component:Attr
     },
     {
       path: "/attention",
