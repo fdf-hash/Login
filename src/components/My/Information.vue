@@ -14,14 +14,11 @@
 			</li>
 			<van-popup v-model="show" position="bottom" :style="{ height: '30%'}" >内容</van-popup>
 
-
-
 			<!--昵称-->
-			<li class="in-tx">
+			<li class="in-tx" @click="name(data.data.nickname)">
 				<span>昵称</span>
 				<span>{{data.data.nickname}}<van-icon name="arrow" class="van-jt"/></span>
 			</li>
-
 
 			<!--手机号-->
 			<li class="in-tx">
@@ -30,10 +27,10 @@
 			</li>
 
 
-			<!--性别-->
-			<li class="in-tx">
+	    	<!--性别-->
+			<li class="in-tx" @click="sex">
 				<span>性别</span>
-				<span>{{data.data.sex}}<van-icon class="van-jt" name="arrow" /></span>
+				<span>{{data.data.sex==0?"男":"女"}}<van-icon class="van-jt" name="arrow" /></span>
 			</li>
 
 
@@ -41,7 +38,7 @@
 			<!--出生日期-->
 			<li class="in-tx" @click="showshijian = true">
 				<span>出生日期</span>
-				<span>{{data.data.id}}<van-icon class="van-jt" name="arrow" /></span>
+				<span>{{data.data.birthday}}<van-icon class="van-jt" name="arrow"/></span>
 			</li>
 			<van-popup v-model="showshijian" position="bottom" :style="{ height: '30%'}" >
 			<van-datetime-picker v-model="currentDate" type="date"  :min-date="minDate" @cancel="showshijian  = false"  @confirm="handleend"/>
@@ -52,7 +49,7 @@
 			<!--所在城市-->
 			<li class="in-tx" @click="showdiqu = true">
 				<span>所在城市</span>
-				<span>{{data.data.city_id}} <van-icon class="van-jt" name="arrow" /></span>
+				<span>{{data.data.province_name+','+data.data.city_name+','+data.data.district_name}} <van-icon class="van-jt" name="arrow" /></span>
 			</li>
 			<van-popup v-model="showdiqu" position="bottom" :style="{ height: '30%'}" >
 				<van-area :area-list="areaList" :columns-num="3" @cancel="showdiqu  = false"  @confirm="queren" />
@@ -61,23 +58,24 @@
 
 
 			<!--学科-->
-			<li class="in-tx"  @click="attr()" v-for="(item,key) in this.data.data.attr" :key="key">
+			<li class="in-tx"  @click="attr()" >
 				<span>学科</span>
-				<span>{{item.attr_value}}<van-icon class="van-jt" name="arrow" /></span>
+				<span>
+                <span v-if="item.attr=='学科'" v-for="(item,key) in this.sub" :key="key">{{item.attr_value}}</span>
+          <van-icon class="van-jt" name="arrow" /></span>
 			</li>
-			<van-popup v-model="showxueke" position="bottom" :style="{ height: '30%'}" >
-				<van-picker  show-toolbar :columns="kemu" @cancel="showxueke = false"  @confirm="onConkemu" />
-			</van-popup>
 
 
 
 			<!--年级-->
-			<li class="in-tx"  @click="showPicker = true">
+			<li class="in-tx"  @click="showpicker()">
 				<span>年级</span>
-				<span>{{this.value}}<van-icon class="van-jt" name="arrow" /></span>
+				<span>
+			    <span v-if="item.attr=='年级'" v-for="(item,key) in this.sub" :key="key">{{item.attr_value}}</span>
+					<van-icon class="van-jt" name="arrow" /></span>
 			</li>
-			<van-popup v-model="showPicker" position="bottom" :style="{ height: '30%' }" >
-				<van-picker  show-toolbar :columns="columns" @cancel="showPicker = false"  @confirm="onConfirm" />
+			<van-popup v-model="showPicker" position="bottom" :style="{ height: '30%' }">
+				<van-picker  show-toolbar :columns="columns" @cancel="showPicker=false"  @confirm="onConfirm" />
 			</van-popup>
 		</ul>
 	</div>
@@ -91,28 +89,39 @@
 			this.axios.get("https://test.365msmk.com/api/app/userInfo?",{
                headers:{Authorization: "Bearer "+localStorage.getItem("remembertoken")}
 			}).then((res)=>{
-			   console.log(res)
-			   this.data = res.data
+			//    基本信息
+			   this.data = res.data;
+			//    学科 年级
+			   this.sub = res.data.data.attr
+            //   localStorage.setItem("attr",JSON.stringify(res.data.data.attr))
 			})
-			// 请求学科
+			// 请求学科  年级
 			this.axios.get("https://test.365msmk.com/api/app/module/attribute/1?",{
                headers:{Authorization: "Bearer "+localStorage.getItem("remembertoken")}
 			}).then((res)=>{
-			   console.log(res)
-			   // this.grade = res.data.data[0]
+		     //选择的年级
+			  this.grade = res.data.data[0].value
+			   console.log(this.grade)
+			 //选择的学科
 			   this.subject = res.data.data[1]
 			})
 		},
+       mounted(){
+        //    localStorage.setItem("attr",JSON.stringify(res.data.data.attr))
+       },
         data(){
         	return{
-				// 基本信息
-				data:"",
-				//年级
-				grade:"",
-				//学科
-				subject:"",
+				// 读取本地存储学科
+        	    sub:JSON.parse(localStorage.getItem("attr")),
+                user:"",
+                arr:"",
+                // 基本信息
+                data:"",
+                //年级
+                grade:"",
+                //学科
+                subject:"",
         		show:false,
-        		value:'',
         		qy:"",
         		ke:'',
         		xianshi:'',
@@ -144,8 +153,7 @@
     						120105: '河北区'
   							}
   					},
-        		columns:['高一', '高二', '高三', '初一', '初二'],
-        		kemu:['数学','语文','英语','物理','化学','政治','地理'],
+				columns:[],
         		minDate: new Date(1999, 1, 1),
         		currentDate: new Date()
 
@@ -156,23 +164,84 @@
         		this.$router.push("/my")
         	},
         	showPopup(){
-        		this.show=true
+				this.show=true
         	},
 //      	年级列表
         	onConfirm(value) {
-     		 this.value = value;
-     		this.showPicker = false;
+				// 定义一个对象，用来保存学级
+              var obj = {
+                  attr_id: 1,
+                  attr_val_id: value.id,
+			  }
+			//   读取本地的学科记录，用来将用户的学级和学级
+			  var arr =JSON.parse(localStorage.getItem("attr"))||[]
+			//   循环遍历，将里面重复的学级截取
+			  for(var i in arr){
+				  console.log(arr[i].attr_id)
+				  if(arr[i].attr_id==1){
+					  arr.splice(i,1)
+				  }
+			  }
+			  console.log(arr)
+              arr.push(obj);
+			  localStorage.setItem("attr", JSON.stringify(arr));
+              this.arr = JSON.stringify(arr);
+     		 this.axios.put("https://test.365msmk.com/api/app/user",{
+            		 user_attr: this.arr
+         },{
+             headers:{Authorization: "Bearer "+localStorage.getItem("remembertoken")}
+         }).then((res)=>{
+             console.log(res.data);
+             if(res.data.code == 200){
+                 this.axios.get("https://test.365msmk.com/api/app/userInfo?",{
+                     headers:{Authorization: "Bearer "+localStorage.getItem("remembertoken")}
+                 }).then((res)=>{
+                     console.log(res)
+                     this.data = res.data;
+                     this.sub = res.data.data.attr
+					//  localStorage.setItem("attr",JSON.stringify(res.data.data.attr))
+					 this.$router.push("/Information");
+                 })
+                
+             }
+         })
+     		 this.showPicker = false;
 
    			 },
 // 			 学科列表
         	onConkemu(ke){
         		this.showxueke = false;
      		    this.ke = ke;
-        	},
+			},
+			// 年级
+			showpicker(){
+				this.showPicker=true
+				for(var i in this.grade){
+					console.log(this.grade[i].name)
+					console.log(this.grade[i].id)
+                    var obj = {text:this.grade[i].name,disabled:false,id:this.grade[i].id,}
+					this.columns.push(obj)
+				}
+			},
 //      	时间列表
         	handleend(){
         		this.showshijian = false;
-        		this.titletime=this.timeFormat(this.currentDate)
+				// this.titletime=
+				// console.log(this.titletime)
+				this.axios.put("https://test.365msmk.com/api/app/user",{
+                    birthday: this.timeFormat(this.currentDate)
+				},{
+					headers:{Authorization: "Bearer "+localStorage.getItem("remembertoken")}
+				}).then((res)=>{
+					console.log(res.data)
+					if(res.data.code == 200){
+						this.$router.go(0);
+						return false;
+					}else if(res.data.code == 201){
+						this.$toast(res.data.msg)
+						return false
+					}
+				})
         	},
         	 timeFormat(time) { // 时间格式化 2019-09-08
        			 let year = time.getFullYear();
@@ -193,7 +262,18 @@
         	    this.$router.push({name:"Attr",params:{
         	       attr: this.subject
                   }})
-            }
+            },
+        //    修改姓名
+            name(name){
+        	    this.$router.push({path:"/set-name",query:{
+        	       data:name
+        	    }})
+			},
+			// 修改性别
+			sex(){
+               this.$router.push("/set-sex")
+			}
+			// 生日
         }
     }
 </script>

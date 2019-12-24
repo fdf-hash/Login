@@ -69,7 +69,9 @@ import Details from "../components/Course/Details"
 //===================================================================================================
 //选择学科路由
 import Attr from "../components/My/Attr";
-
+//设置姓名
+import Setname from "../components/My/set-name"
+import Setsex from "../components/My/set-sex"
 Vue.use(Router);
 export default new Router({
   routes: [{
@@ -234,10 +236,23 @@ export default new Router({
         type: 'token' //是否需要判断登录
       }
     },
+    //学科路由
     {
       path:"/attr",
       name:"Attr",
       component:Attr
+    },
+    //修改姓名
+    {
+      path:"/set-name",
+      name:"Setname",
+      component:Setname
+    },
+    // 男女
+    {
+      path:"/set-sex",
+      name:"Setsex",
+      component:Setsex
     },
     {
       path: "/attention",
