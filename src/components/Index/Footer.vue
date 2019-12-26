@@ -2,23 +2,23 @@
     <div  class="foot">
       <ul>
 		<router-link to="/home" tag="li">
-			<img :src="this.$route.path=='/home'?'../../../static/foot-img/home-active.png':'../../../static/foot-img/home.png'" alt="">
+			<img :src="this.$route.path=='/home'?'/static/foot-img/home-active.png':'/static/foot-img/home.png'" alt="">
 		  <p>首页</p>
 		</router-link>
 		<router-link to="/course" tag="li">
-			<img :src="this.$route.path=='/course'?'../../../static/foot-img/course-active.png':'../../../static/foot-img/course.png'" alt="">
+			<img :src="this.$route.path=='/course'?'/static/foot-img/course-active.png':'/static/foot-img/course.png'" alt="">
 		  <p>课程</p>
 		</router-link>
 		<router-link to="/study" tag="li">
-			<img :src="this.$route.path=='/study'?'../../../static/foot-img/study-active.png':'../../../static/foot-img/study.png'" alt="">
+			<img :src="this.$route.path=='/study'?'/static/foot-img/study-active.png':'/static/foot-img/study.png'" alt="">
 		  <p>约课记录</p>
 		</router-link>
 		<router-link to="/edit" tag="li">
-			<img :src="this.$route.path=='/edit'?'../../../static/foot-img/edit-active.png':'../../../static/foot-img/edit.png'" alt="">
+			<img :src="this.$route.path=='/edit'?'/static/foot-img/edit-active.png':'/static/foot-img/edit.png'" alt="">
 		  <p>练习</p>
 		</router-link>
 		<router-link to="/my" tag="li">
-			<img :src="this.$route.path=='/my'?'../../../static/foot-img/my-active.png':'../../../static/foot-img/my.png'" alt="">
+			<img :src="this.$route.path=='/my'?'/static/foot-img/my-active.png':'/static/foot-img/my.png'" alt="">
 		  <p>我的</p>
 		</router-link>
       </ul>

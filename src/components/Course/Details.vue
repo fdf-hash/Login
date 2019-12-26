@@ -1,66 +1,66 @@
 <template>
-    <div class="wll_details">
-        <!-- 详情页面 -->
-        <div class="wll_destop">
-            <p>
-                <router-link class="wll_fhindex" tag="span" to="/course">&lt;</router-link> 
-                <span>课程详情</span>
-                <img src="../../../static/course-img/share.png" alt="">
-            </p>
-        </div>
-        <div v-for="(item,key) in wll_details" :key="key" class="wll_div" v-show="id==item.id">
-            <div class="wll_detdiv">
-                <p>
-                    <span>{{item.name}}</span>
-                    <img src="../../../static/course-img/sc.png" alt="">
-                </p>
-                <p>免费</p>
-                <p>
-                    <span>{{item.lesson}}</span>
-                    <span>{{item.count}}</span>
-                </p>
-                <p>
-                    <span>开课时间:</span>
-                    <span>{{item.open}}</span>
-                </p>
-            </div>
-            <div>
-                <h2>教学团队</h2>
-                <ul>
-                    <li>
-                        <img class="wll_img1" :src="'../../../static/course-img/'+item.img" alt="">
-                        <p>{{item.teachername}}</p>
-                    </li>
-                </ul>
-            </div>
-            <div>
-                <h2>课程介绍</h2>
-                <p>{{item.introduce}}</p>
-            </div>
-            <div>
-                <h2>课程大纲</h2>
-                <ul>
-                    <li>
-                        <div class="wll_coldiv">
-                             <p>
-                                <span>{{item.visit}}</span>
-                                <span>{{item.outline}}</span>
-                            </p>
-                            <p>
-                                {{item.outline2}}
-                            </p>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            <div>
-                <img src="../../../static/course-img/pic2.png" alt="">
-            </div>
-        </div>
-        <div class="wll_desfood">
-            <h2>立即报名</h2>
-        </div>
+  <div class="wll_details">
+    <!-- 详情页面 -->
+    <div class="wll_destop">
+      <p>
+        <router-link class="wll_fhindex" tag="span" to="/course">&lt;</router-link>
+        <span>课程详情</span>
+        <img src="../../../static/course-img/share.png" alt="">
+      </p>
     </div>
+    <div class="wll_div">
+      <div class="wll_detdiv">
+        <p>
+          <span>{{wll_details.info.title}}</span>
+          <img src="../../../static/course-img/sc.png" alt="">
+        </p>
+        <p>免费</p>
+        <p>
+          <span>1111111111111</span>
+          <span>111111111111</span>
+        </p>
+        <p>
+          <span>开课时间:</span>
+          <span>111111111111</span>
+        </p>
+      </div>
+      <div>
+        <h2>教学团队</h2>
+        <ul>
+          <li>
+            <img class="wll_img1" src="../../../static/course-img/sc.png" alt="">
+            <p>11111111111111</p>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <h2>课程介绍</h2>
+        <p>1111111111111</p>
+      </div>
+      <div>
+        <h2>课程大纲</h2>
+        <ul>
+          <li>
+            <div class="wll_coldiv">
+              <p>
+                <span>111111111111111111111</span>
+                <span>111111111111111111</span>
+              </p>
+              <p>
+               11111111111111111111111
+              </p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <img src="../../../static/course-img/pic2.png" alt="">
+      </div>
+    </div>
+    <div class="wll_desfood">
+      <h2>立即报名</h2>
+    </div>
+  </div>
 </template>
 <script>
     //引入axios请求器
@@ -69,17 +69,21 @@
         name:"Details",
         data() {
             return {
-                wll_details:[],
+                wll_details:{},
                 id:"",
                 collect:JSON.parse(localStorage.getItem("collect")) || []
             }
         },
         mounted() {
-            this.id=this.$route.query.id;
+            // this.id=this.$route.query.id;
             // this.id= item.id
             // console.log(id);
-            axios.get("../../../static/date.json").then((res)=>{
-                console.log(res);
+            // axios.get("../../../static/date.json").then((res)=>{
+            //     console.log(res);
+            //     this.wll_details = res.data.data;
+            // })
+            this.axios.get("https://test.365msmk.com/api/app/courseInfo/basis_id=57?&courseType=5").then(res=>{
+                console.log(res.data.data);
                 this.wll_details = res.data.data;
             })
         },
@@ -183,7 +187,7 @@
                         margin: 0 auto;
                         font-size: 0.24rem;
                         color: #8a857f;
-                    
+
                     }
                 }
                 div:nth-of-type(2){
@@ -208,7 +212,7 @@
                             width: 1.1rem;
                             height: 0.98rem;
                             line-height: 0.36rem;
-                           
+
                             img{
                                 width: 0.36rem;
                                 height: 0.36rem;
@@ -219,7 +223,7 @@
                             p{
                                color: #b0b0b0;
                                 line-height: 0.36rem;
-                                margin-left: 20px; 
+                                margin-left: 20px;
                                 text-align: center;
                             }
                         }
@@ -248,7 +252,7 @@
                     padding: 0.26rem 0 0.26rem 0.26rem;
                     h2{
                         width: 5.80rem;
-                        
+
                     }
                     ul{
                         width: 5.80rem;

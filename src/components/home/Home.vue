@@ -8,7 +8,7 @@
                 <div class="zjb_banner">
                     <!-- 轮播图布局开始 -->
                     <van-swipe :autoplay="3000">
-                   
+
                       <van-swipe-item><img src="https://msmk2019.oss-cn-shanghai.aliyuncs.com/uploads/image/20197Cxc53hktC1569839552.jpg" alt=""></van-swipe-item>
                       <van-swipe-item><img src="https://msmk2019.oss-cn-shanghai.aliyuncs.com/uploads/image/2019MGNW3BtiS91569839576.jpg" alt=""></van-swipe-item>
                       <van-swipe-item><img src="https://msmk2019.oss-cn-shanghai.aliyuncs.com/uploads/image/2019LnKumseuhw1569839569.jpg" alt=""></van-swipe-item>
@@ -36,7 +36,34 @@
                 </div>
             <!-- 头部布局结束 -->
             </div>
-
+         <div id="zjb_con_recommend">
+         <p>推荐课程</p>
+         <ul>
+           <router-link to="/details" tag="li" v-for="(item,key) in Recommend" :key="key">
+             <h1>{{item.title}}</h1>
+             <h2>
+               <p>
+                 10月23日13:00〜10月23日14:45&nbsp;&nbsp;|&nbsp;&nbsp;
+               </p>
+               <p>
+                 共{{item.total_periods}}课时
+               </p>
+             </h2>
+             <h3 v-for="(item,key) in item.teachers_list" :key="key" v-if="item.id==38">
+               <img :src="item.teacher_avatar" alt="">
+               <span>{{item.teacher_name}}</span>
+             </h3>
+             <h4>
+               <p>
+                 {{item.sales_num}}人报名
+               </p>
+               <p>
+                {{item.price}}
+               </p>
+             </h4>
+           </router-link>
+         </ul>
+         </div>
             <div class="zjb_con_home">
                 <!-- 名师内容布局开始 -->
                 <p>明星讲师</p>
@@ -83,10 +110,15 @@ import axios from "axios";//==引入axios模块
         name: "Home",
          data() {
             return {
-              
+                //课程
+                Recommend:[],
             }
         },
         mounted(){
+            this.axios.get("https://test.365msmk.com/api/app/recommend/appIndex?").then(res=>{
+                console.log(res.data.data)
+                this.Recommend=res.data.data[0].list
+            });
             //-->读取json数据，并渲染到页面上
             axios.get("/static/home.json")
             .then(res => {
@@ -94,7 +126,7 @@ import axios from "axios";//==引入axios模块
                 this.$store.state.list=res.data.home;
             })
             .catch(err => {
-                console.error(err); 
+                console.error(err);
             })
         },
         methods:{
@@ -192,7 +224,7 @@ import axios from "axios";//==引入axios模块
                 height: .8rem;
                 // border: 1px solid #000;
                 margin-left: .2rem;
-                
+
                &>div{
                    display: flex;
                    margin-top: .1rem;
@@ -217,5 +249,76 @@ import axios from "axios";//==引入axios模块
         }
     }
 }
-    
+
+#zjb_con_recommend{
+      width: 6rem;
+      margin: 0 auto;
+      &>p{
+        font-size: .27rem;
+        border-left: 4px solid red;
+        padding-left: .2rem;
+        color: #595959;
+        height: .34rem;
+        line-height: .34rem;
+      }
+      ul{
+        width: 6rem;
+        margin: 0.17rem auto 0;
+        li{
+          height: 3rem;
+          background: #fff;
+          border-radius: 0.2rem;
+          padding: 0 0.24rem;
+          margin-bottom: 0.17rem;
+          h1{
+            font-weight: normal;
+            font-size: 0.26rem;
+            padding-top: 0.24rem;
+          }
+          h2{
+            font-weight: normal;
+            height:0.5rem;
+            display: flex;
+            align-items: center;
+            p{
+              font-size: 0.2rem;
+              line-height: 0.5rem;
+            }
+          }
+          h3{
+            height: 1.1rem;
+            display: flex;
+            align-items: center;
+            img{
+              width: 0.68rem;
+              height: 0.68rem;
+              border-radius: 50%;
+            }
+            span{
+              display: inline-block;
+              font-size: 0.2rem;
+              color: rgba(0,0,0,.45);
+              margin-left: 0.1rem;
+            }
+          }
+          h4{
+            height: 0.75rem ;
+            border-top: 1px solid #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: normal;
+            p:nth-child(1){
+              font-size: 0.28rem;
+              color: rgba(0,0,0,.45)
+            }
+            p:nth-child(2){
+              font-size: 0.28rem;
+              color: #44a426;
+            }
+          }
+        }
+      }
+    }
+
 </style>
