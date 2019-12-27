@@ -25,7 +25,7 @@
         },
         methods:{
            cun(){
-            this.axios.put("/app/user",{
+            this.axios.put("https://test.365msmk.com/api/app/user",{
                  nickname: this.title
             },{
                headers:{Authorization: "Bearer "+localStorage.getItem("remembertoken")}

@@ -32,11 +32,14 @@
 </template>
 
 <script >
-
-  import Nologin from "./Nologin";
-  import Already from "./Already";
-  import Cancel from "./Cancel";
-  import Wait from "./Wait";
+    //未登录
+    import Nologin from "./Nologin";
+    //已上课
+    import Already from "./Already";
+    //已取消
+    import Cancel from "./Cancel";
+    //待上课
+    import Wait from "./Wait";
     export default {
         name: "Study",
         components: {Cancel, Wait, Already, Nologin},

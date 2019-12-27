@@ -82,23 +82,35 @@ export default new Router({
           path: "/home",
           name: "Home",
           component: Home,
+          meta:{
+              title:"每日每课"
+          }
         },
         {
           path: "/course",
           name: "Course",
           component: Course,
+          meta:{
+            title:"课程"
+          }
         },
         // 约课路由
         {
           path: "/study",
           name: "Study",
-          component: Study
+          component: Study,
+          meta:{
+            title:"约课记录"
+          }
         },
         //练习下的路由
         {
           path: "/edit",
           name: "Edit",
           component: Edit,
+          meta:{
+            title:"练习"
+          }
         },
         //考点专练路由
         {
@@ -154,7 +166,8 @@ export default new Router({
           name: "My",
           component: My,
           meta: {
-            type: 'token' //是否需要判断登录
+            type: 'token', //是否需要判断登录
+            title:"个人中心"
           }
         },
         //==================================================================
@@ -265,7 +278,10 @@ export default new Router({
     {
       path: "/login",
       name: 'Login',
-      component: Login
+      component: Login,
+      meta:{
+        title:"登录"
+      }
     },
     {
       path: "/forget",

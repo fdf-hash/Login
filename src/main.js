@@ -74,16 +74,25 @@ router.beforeEach((to, from, next) =>{
 //--->引入vant框架的tab组件
 import { Tab, Tabs } from 'vant';
 Vue.use(Tab).use(Tabs);
+//设置标题
+import VueWechatTitle from 'vue-wechat-title'
+Vue.use(VueWechatTitle);
 Vue.config.productionTip = false;
 
 // import {Calenda} from 'element-ui';
 // import 'element-ui/lib/theme-chalk/index.css';
 // Vue.use(Calenda);
 /* eslint-disable no-new */
+router.beforeEach((to, from, next) => {
+  /* 路由发生变化修改页面title */
+  if (to.meta.title) {
+    document.title = to.meta.title;
+  }
+  next();
+})
 Vue.config.productionTip = false;
 new Vue({
   el: '#app',
-  store,
   router,
   store,
   render: h => h(App)

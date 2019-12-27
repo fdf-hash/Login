@@ -17,28 +17,28 @@
             </div>
             <div class="wll_conter">
                <ul class="wll_ul">
-                   <li v-for="(item,key) in wll_course" :key="key" class="wll_li"> 
-                       <router-link :to="'/details?id='+item.id" tag="div" class="wll_div">
+                   <li v-for="(item,key) in wll_course" :key="key" class="wll_li" @click="pushDetails(item)">
+                       <div class="wll_div">
                             <div>
-                                <h2>{{item.name}}</h2>
+                                <h2>{{item.title}}</h2>
                             </div>
                             <div>
-                                <span>{{item.time}}</span>
-                                <span>{{item.lesson}}</span>
+                                <span>{{item.id}} |</span>
+                                <span>共{{item.total_periods}}课时</span>
                             </div>
                             <div>
                                 <ul>
-                                    <li>
-                                        <img class="wll_img1" :src="'../../../static/course-img/'+item.img" alt="">
-                                        <span>{{item.teachername}}</span>
+                                    <li v-for="(item,key) in item.teachers_list" :key="key">
+                                        <img class="wll_img1" :src="item.teacher_avatar" alt="">
+                                        <span>{{item.teacher_name}}</span>
                                     </li>
                                 </ul>
                             </div>
                             <div>
-                                <p>{{item.count}}</p>
-                                <p>{{item.price}}</p>
+                                <p>{{item.sales_num}}人报名</p>
+                                <p :style="item.price=='免费'?'':'color: #ee1f1f;'">￥{{item.total_periods}}.00</p>
                             </div>
-                     </router-link>
+                     </div>
                    </li>
                </ul>
             </div>
@@ -76,15 +76,32 @@
             }
         },
         mounted() {
-            axios.get("../../../static/date.json").then((msg)=>{
-                console.log(msg);
-                this.wll_course=msg.data.data;
+            // axios.get("../../../static/date.json").then((msg)=>{
+            //     // console.log(msg);
+            //     this.wll_course=msg.data.data;
+            // })
+            this.axios.get("https://test.365msmk.com/api/app/courseBasis?page=1&limit=10&",{
+                header:{Authorization: "Bearer " + localStorage.getItem("remembertoken")}
+            }).then((res)=>{
+                console.log(res.data.data)
+                 this.wll_course=res.data.data.list;
             })
         },
         methods:{
             add(){
-                this.$router.push({path:"/serch"})
-            }
+                this.$router.go(-1)
+            },
+            pushDetails(item) {
+                this.$router.push({
+                    path: "/details", query: {
+                        //传递课程id
+                        id: item.id,
+                        //传递课程类型
+                        courseType: item.course_type,
+                        urlimg: item.teachers_list
+                    }
+                })
+            },
         }
     }
 </script>
@@ -155,15 +172,17 @@
                         div:nth-of-type(1){
                             height: 0.52rem;
                             h2{
-                                height: 0.28rem;
+                                font-weight: 500;
+                                font-size: 0.28rem;
                                 padding-top: 0.26rem;
                                 color: #000000;
                             }
-                        
+
                         }
                         div:nth-of-type(2){
                             padding-top: 0.16rem;
-                            p{
+                            span{
+                                font-size: 0.24rem;
                                 color: #666666;
                             }
                         }
@@ -177,7 +196,7 @@
                                 display: flex;
                                 align-items: center;
                                 li{
-                                    width: 33.33%;
+                                    // width: 33.33%;
                                     height: 0.36rem;
                                     line-height: 0.36rem;
                                     line-height: 56px;
@@ -191,7 +210,8 @@
                                     span{
                                         color: #b0b0b0;
                                         line-height: 0.36rem;
-                                        margin-left: 20px; 
+                                        margin-left: 20px;
+                                        font-size: 0.2rem;
                                     }
                                 }
                             }
@@ -205,9 +225,10 @@
                                 height: 94px;
                                 line-height: 94px;
                                 color: #8c8c8c;
+                                 font-size: 0.24rem;
                             }
                             p:nth-of-type(2){
-                                color: #43a425;
+                                font-size: 0.24rem;
                             }
                         }
                     }
